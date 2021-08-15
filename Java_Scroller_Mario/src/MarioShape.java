@@ -1,0 +1,326 @@
+import java.awt.*;
+import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+
+public class MarioShape implements MoveableShape
+{
+	private int BLOCK_SIZE;
+	private int dx, dy;
+	private static int player_speed = 2;
+	
+	private short screenData[][];
+	private boolean PowerUp;
+	private boolean Airborne = false;
+	private boolean FacingRight = true;
+	
+	//private Image KirbyRight = new ImageIcon("gamepix/Kirby1.png").getImage();
+	File inFile = new File("gamepix/Kirby1.png");
+	BufferedImage KirbyRight;
+	private Image KirbyRightTrans;
+
+	{
+		try {
+			KirbyRight = ImageIO.read(inFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	BufferedImage KirbyLeft;
+
+	BufferedImage background = new BufferedImage(KirbyRight.getWidth(null), KirbyRight.getHeight(null), BufferedImage.TYPE_INT_RGB);
+	BufferedImage KirbyRightBuffered;
+	//private Image[][] kirbyImages = new Image [4][4];
+	//private ImageIcon[] KirbyRightWalkArray = new ImageIcon[4];
+	private BufferedImage[][] KirbyRightWalkArray = new BufferedImage[3][4];
+	private int KirbyWalkIdx = -1;
+
+	
+	private int view_dx = -1; private int view_dy = 0;
+	private int req_dx = 0; private int req_dy = 0;
+	private int player_x, player_y;
+	private int player_dx = 0; private int player_dy = 0;
+
+	public MarioShape (short screenData[][], int brd_x, int brd_y, int req_dx, int req_dy,
+				int width, boolean PowerUp)
+	{
+		this.screenData = screenData;
+		this.player_x = brd_x * width;
+		this.player_y = brd_y * width;
+		this.BLOCK_SIZE = width;
+		this.PowerUp = PowerUp;
+		this.req_dx = req_dx;
+		this.req_dy = req_dy;
+
+		KirbyLeft = toBufferedImage( new ImageIcon("gamepix/Kirby2.png").getImage() );
+		//KirbyLeft = TransformColorToTransparency( toBufferedImage(KirbyLeft) );
+
+
+		//	KIRBY RIGHT WALKING SPRITES
+		//
+		Image KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-2.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[0][0] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-3.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation));
+		KirbyRightWalkArray[0][1] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-2.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[0][2] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-4.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[0][3] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		//	KIRBY LEFT WALKING SPRITES
+		//
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-2.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[1][0] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-3.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation));
+		KirbyRightWalkArray[1][1] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-2.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[1][2] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-4.png").getImage();
+		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
+		KirbyRightWalkArray[1][3] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+
+		KirbyRightBuffered = new BufferedImage(
+				KirbyRight.getWidth(null),
+				KirbyRight.getHeight(null),
+				BufferedImage.TYPE_INT_RGB);
+		//System.out.println("OTAY: " + KirbyRightBuffered.getRGB(0,0) );
+
+	}
+
+	public void draw(Graphics2D g2) 
+	{
+		//System.out.println(x +" "+ y);
+		if (player_dx == 1) {
+			KirbyWalkIdx += 1;
+			KirbyRightBuffered = KirbyRightWalkArray[0][ (KirbyWalkIdx) % 4 ];
+			FacingRight = true;
+		}
+		else if ( player_dx == -1 ) {
+			KirbyWalkIdx += 1;
+			KirbyRightBuffered = KirbyRightWalkArray[1][ (KirbyWalkIdx) % 4 ];
+			FacingRight = false;
+		}
+		//g2.drawImage(KirbyRight, player_x, player_y, null); //supposed to be player_x, player_y
+		//Graphics2D g2d = background.createGraphics();
+		//g2.setColor(Color.BLACK);
+		//g2.fillRect(player_x, player_y, background.getWidth(), background.getHeight());
+		else {
+			if (FacingRight) {
+				KirbyRightTrans = TransformColorToTransparency(KirbyRight); //image
+			} else {
+				KirbyRightTrans = TransformColorToTransparency(KirbyLeft); //image
+			}
+			KirbyRightBuffered = imageToBufferedImage(KirbyRightTrans, KirbyRight.getWidth(), KirbyRight.getHeight()); //buffered image
+			File outFile2 = new File("gamepix/KirbyTrans.png");
+			try {
+				ImageIO.write(KirbyRightBuffered, "PNG", outFile2);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//KirbyRightBuffered.getGraphics();
+			//g2.drawImage(KirbyRightTrans, player_x, player_y, null); //supposed to be player_x, player_y
+		}
+		g2.drawImage(KirbyRightBuffered, null, player_x, player_y);
+
+		// ONLY USE .dispose() WHEN YOU EXPLICITYLY CALL GRAPHICS YOURSELE (AKA .createGraphic()
+		//g2.dispose();
+
+		if (player_dx == 0) { KirbyWalkIdx = -1; } // reset sprite counter
+		System.out.println(player_x + ":x y: " + player_y);
+		
+	}
+
+	public void move() 
+	{
+		int px, py;
+		short ch;
+		System.out.println(player_dx + " " + req_dx + " " + player_dx );
+
+		if (req_dx == -player_dx && req_dy == -player_dy)
+		{
+			// Triggers when not moving ( POSSIBLY 0 == 0 )
+			//System.out.println("first");
+			player_dx = req_dx;
+			player_dy = req_dy;
+			view_dx = player_dx;
+			view_dy = player_dy;
+		}
+		
+		if (player_x % BLOCK_SIZE == 0 && player_y % BLOCK_SIZE == 0)
+		{
+			//System.out.println("second");
+			px = player_x / BLOCK_SIZE;
+			py = player_y / BLOCK_SIZE;
+			//ch = screenData[py][px]; //THIS NEEDS TO BE FLIPPED
+			ch = screenData[px][py];
+			//System.out.println(screenData[px][py+1]); // BOARD VIEW
+			if (screenData[px][py+1] == 1) { Airborne = false; }
+			//System.out.println(py + " " + px);
+			//more here stop for walls/pipes/enemy
+			
+			if (req_dx != 0 || req_dy != 0) //key press is moved
+				//if conditional here to check if pipe or object is stopping motion
+				System.out.println("second. second");
+				player_dx = req_dx;
+				player_dy = req_dy;
+				view_dx = player_dx;
+				view_dy = player_dy;
+
+		}
+
+			if (Airborne)
+			{
+				player_x = player_x + player_speed * player_dx;
+				player_y = player_y + player_speed * 1;
+			}
+			else
+			{
+				player_x = player_x + player_speed * player_dx;
+				player_y = player_y + player_speed * player_dy;
+			}
+			
+			if (player_dy == -1) {
+				System.out.println("hello");
+				if ( getPlayer_y() == 187) {
+					//stop player from going below ground
+					System.out.println("STOP");player_dy = 0; Airborne = false;} //slopppyyy FIX
+				//Airborne = true;
+			}
+		//System.out.println(player_x + " " + player_y);
+
+		
+		
+	}
+
+	public boolean contains(int x, int y)
+	{
+		//System.out.println("KIRBY Y: " + player_y + " ENEMY Y: " + y);
+
+		// WORKS IF ENEMY IS ON RIGHT OF PLAYER
+		//if (player_y == y-BLOCK_SIZE && ( (player_x >= x-BLOCK_SIZE && player_x <= x) || (player_x >= x && player_x <= x+BLOCK_SIZE) ) ) {
+		if (player_x/BLOCK_SIZE == x/BLOCK_SIZE && player_y/BLOCK_SIZE == (y/BLOCK_SIZE)-1) {
+			System.out.println("Kirby Kill");
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public void keyTracker(int req_dx, int req_dy) 
+	{
+		this.req_dx = req_dx; this.req_dy = req_dy;
+		//System.out.println ("updated");
+	}
+	
+	public void jump ()
+	{ Airborne = true; }
+
+	public int getPlayer_y() {
+		//starts 187, one block up is 170, 153
+		return player_y;
+	}
+
+	public int getPlayer_x() {
+		//starts 187, one block up is 170, 153
+		return player_x;
+	}
+
+	/* UNECESSARY?
+	public void reset() {
+		// EVERYTHING RESETS THAT WILL MESS UP PLAYER
+		Airborne = false;
+	} */
+
+////////////////////////
+
+	private static BufferedImage imageToBufferedImage(Image image, int width, int height) {
+
+		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = bufferedImage.createGraphics();
+		g2.drawImage(image, 0, 0, null);
+		g2.dispose();
+
+		return bufferedImage;
+
+	}
+
+	//private Image TransformColorToTransparency(BufferedImage image, Color c1, Color c2)
+	private Image TransformColorToTransparency(BufferedImage image)
+	{
+		// Primitive test, just an example
+		final int r1 = 233;//c1.getRed();
+		final int g1 = 233;//c1.getGreen();
+		final int b1 = 233;//c1.getBlue();
+		final int r2 = 255;//c2.getRed();
+		final int g2 = 255;//c2.getGreen();
+		final int b2 = 255;//c2.getBlue();
+		ImageFilter filter = new RGBImageFilter()
+		{
+			public final int filterRGB(int x, int y, int rgb)
+			{
+				int r = (rgb & 0xFF0000) >> 16;
+				int g = (rgb & 0xFF00) >> 8;
+				int b = rgb & 0xFF;
+				//System.out.println(r+" "+g+" "+b);
+				if (r >= r1 && r <= r2 &&
+						g >= g1 && g <= g2 &&
+						b >= b1 && b <= b2)
+				{
+					// Set fully transparent but keep color
+					return rgb & 0xFFFFFF;
+				}
+				return rgb;
+			}
+		};
+
+		ImageProducer ip = new FilteredImageSource(image.getSource(), filter);
+		return Toolkit.getDefaultToolkit().createImage(ip);
+	}
+
+	/**
+	 * Converts a given Image into a BufferedImage
+	 *
+	 * @param img The Image to be converted
+	 * @return The converted BufferedImage
+	 */
+	public static BufferedImage toBufferedImage(Image img)
+	{
+		if (img instanceof BufferedImage)
+		{
+			return (BufferedImage) img;
+		}
+
+		// Create a buffered image with transparency
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+		// Draw the image on to the buffered image
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
+
+		// Return the buffered image
+		return bimage;
+	}
+
+
+
+}
