@@ -163,8 +163,9 @@ public class MarioShape implements MoveableShape
 			view_dx = player_dx;
 			view_dy = player_dy;
 		}
-		
-		if (player_x % BLOCK_SIZE == 0 && player_y % BLOCK_SIZE == 0)
+
+		// use or here because even if we are inbetween x coordinates we want to check if we hit the ground
+		if (player_x % BLOCK_SIZE == 0 || player_y % BLOCK_SIZE == 0) // USED TO BE &&
 		{
 			//System.out.println("second");
 			px = player_x / BLOCK_SIZE;
@@ -172,7 +173,7 @@ public class MarioShape implements MoveableShape
 			//ch = screenData[py][px]; //THIS NEEDS TO BE FLIPPED
 			ch = screenData[px][py];
 			//System.out.println(screenData[px][py+1]); // BOARD VIEW
-			if (screenData[px][py+1] == 1) { Airborne = false; }
+			if (getPlayer_y() == BLOCK_SIZE*11) { Airborne = false; }
 			//System.out.println(py + " " + px);
 			//more here stop for walls/pipes/enemy
 			

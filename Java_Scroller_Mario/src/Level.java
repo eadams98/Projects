@@ -27,7 +27,7 @@ public class Level extends JPanel
     private Color Background = new Color (0, 219, 255);
     private Timer timer;
     private short[][] screenData;
-    private final int JUMP_HEIGHT = BLOCK_SIZE * 2; // jump height to eliminate magic numbers
+    private final int JUMP_HEIGHT = BLOCK_SIZE * 3; // jump height to eliminate magic numbers
 	private final int FLOOR_LOCATION = BLOCK_SIZE * 11;
     
     private final static int GROUND = 0;
@@ -35,6 +35,8 @@ public class Level extends JPanel
     private final static int PIPE = 5;
     private final static int BLOCK = 3;
     private final static int MYS_BLOCK = 4;
+    // after mys_block has ben hit
+	private final static int MYS_BLOCK_USED = 6;
     
     private MarioShape Player; private EnemyShape Enemy;
     private List<EnemyShape> EnemyList = new ArrayList<>(1);
@@ -46,7 +48,7 @@ public class Level extends JPanel
 	private Image grass = new ImageIcon("gamepix/topGround.png").getImage();
 	private Image pipe = new ImageIcon("gamepix/pipebody.png").getImage();
 	private Image block = new ImageIcon("gamepix/yellowEye.png").getImage();
-	//private Image mys_block = new ImageIcon("gamepix/question1.png").getImage();
+	private Image mys_block_used = new ImageIcon("gamepix/greyEye.png").getImage();
 
 	private Image[] mys_block = {
 			new ImageIcon("gamePix/question1.png").getImage(),
@@ -287,6 +289,8 @@ public class Level extends JPanel
 					//System.out.println("3");
 				if (screenData[gr][gc] == MYS_BLOCK)
 					g2d.drawImage(mys_block[mys_blockAnim], r, c, null);//draw mys block
+				if (screenData[gr][gc] == MYS_BLOCK_USED)
+					g2d.drawImage(mys_block_used, r, c, null);//draw mys block after being hit
 					
 				
 			}
@@ -339,8 +343,11 @@ public class Level extends JPanel
 		//System.out.println(Player.getPlayer_y());
 
 		// If player is jumping don't toggle Player's Airborne propert until it reaches the height of its jump
-		// BLOCK_SIZE = 17, then 170. BLOCK_SIZE = 16 then 160
-		if ( Player.getPlayer_y() == FLOOR_LOCATION - JUMP_HEIGHT ) { Player.jump(); }
+
+		if ( 	Player.getPlayer_y() == FLOOR_LOCATION - JUMP_HEIGHT || // reached the apex of jump height
+				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == BLOCK || // block above head
+				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK // mys block above head
+			) { Player.jump(); }
 
 		// If player is not on the ground, then don't reset the player's momentum until it reaches the ground
 		// BLOCK_SIZE = 17, then 187. BLOCK_SIZE = 16 then 176
@@ -351,6 +358,10 @@ public class Level extends JPanel
 		// SPINNING mys_blocks (DEPENDENT ON PLAYER BEING ALIVE IF IT SPINS)
 		mys_blockAnim += 1;
 		if (mys_blockAnim > 3) { mys_blockAnim = 0;}
+		int Px = Player.getPlayer_x()/BLOCK_SIZE; int Py = Player.getPlayer_y()/BLOCK_SIZE;
+		if (screenData[Px][Py] == MYS_BLOCK)
+			screenData[Px][Py] = MYS_BLOCK_USED;
+			//g2d.drawImage(mys_block_used, Px*BLOCK_SIZE, Py*BLOCK_SIZE, null);//draw mys block after being hit
 
 	}
 
