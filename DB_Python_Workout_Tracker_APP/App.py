@@ -57,6 +57,7 @@ class Application(tk.Frame):
 
         self.db = Translator()
         self.table_entries = None
+        self.colNames = [] ###### !!!! 
 
     def create_widgets(self):
         '''
@@ -109,7 +110,17 @@ class Application(tk.Frame):
             #call switch pages
             self.switch_page("Tables Page")
 
-    def open_table_view(self, tableName):
+    def open_table_view(self, tableName, lstBox):
+        print()
+
+        self.colNames = []
+        idxs = lstBox.curselection()
+        print("selected: ", lstBox.curselection())
+        for idx in idxs:
+            print(lstBox.get(idx))
+            self.colNames.append(lstBox.get(idx))
+
+        print()
         self.table_entries = self.db.get_table(tableName)
         if self.table_entries != -1:
             print(self.table_entries)
@@ -197,7 +208,10 @@ class Application(tk.Frame):
         # Table View Page (EX: arms, push_exercises, etc)
         if self.table_entries != None:
             print()
-            keys = ['name', 'reps', 'lbs']
+
+            #keys = ['name', 'reps', 'lbs']
+            keys = self.colNames
+
             for col, key in enumerate(keys):
                 # label = col name
                 name = tk.Label(self.master, text=key)
@@ -243,12 +257,12 @@ class Application(tk.Frame):
 
                     #create table's columns
                     list_items = tk.StringVar(value=columnNames)
-                    self.list_box = tk.Listbox(self.master, listvariable=list_items)
+                    self.list_box = tk.Listbox(self.master, listvariable=list_items, selectmode='multiple')
                     self.list_box.grid(column=idx, row= 1)
 
                     #create button to enter table
                     # lambda is a way to pass var to command functions
-                    self.button = tk.Button(self.master, text="View", command= lambda t=tableName: self.open_table_view(t))
+                    self.button = tk.Button(self.master, text="View", command= lambda t=tableName, selected = self.list_box: self.open_table_view(t, selected))
                     self.button.grid(column=idx, row= 2)
 
 
