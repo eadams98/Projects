@@ -41,6 +41,7 @@ public class Level extends JPanel
     private MarioShape Player; private EnemyShape Enemy;
     private List<EnemyShape> EnemyList = new ArrayList<>(1);
     private List<Integer> toBeDel = new ArrayList<>();
+    private List<MoveableShape> items = new ArrayList<>();
     private boolean PowerUp = false;
     private int req_dx, req_dy;
     
@@ -49,6 +50,7 @@ public class Level extends JPanel
 	private Image pipe = new ImageIcon("gamepix/pipebody.png").getImage();
 	private Image block = new ImageIcon("gamepix/yellowEye.png").getImage();
 	private Image mys_block_used = new ImageIcon("gamepix/greyEye.png").getImage();
+	private Image mushroom = new ImageIcon("gamepix/mushroom.png").getImage();
 
 	private Image[] mys_block = {
 			new ImageIcon("gamePix/question1.png").getImage(),
@@ -216,6 +218,8 @@ public class Level extends JPanel
 	{
 		playerLives--;
 		dying = false;
+		EnemyList.clear(); // remove all enemy's from last play through
+		items.clear();
 		
 		if (playerLives == 0)
 			inGame = false;
@@ -306,6 +310,19 @@ public class Level extends JPanel
 		{
 
 			movePlayer (g2d);
+
+			if (!items.isEmpty()) {
+				for (MoveableShape item : items) {
+					item.move();
+					item.draw(g2d);
+				}
+			}
+
+			// if no enemies left generate more ( EITHER MAKE THIS A FUNCTION OR REMOVE ENTIRELY )
+			//if (EnemyList.isEmpty()) {
+			//	EnemyList.add(new EnemyShape(screenData, 0, 11, 0, 0, BLOCK_SIZE, PowerUp));
+			//}
+
 			for (EnemyShape  villian: EnemyList) {
 				if ( Player.contains(villian.getPlayer_x(), villian.getPlayer_y()) )
 					//System.out.println("villian IDX: " + EnemyList.indexOf(villian));
@@ -346,7 +363,8 @@ public class Level extends JPanel
 
 		if ( 	Player.getPlayer_y() == FLOOR_LOCATION - JUMP_HEIGHT || // reached the apex of jump height
 				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == BLOCK || // block above head
-				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK // mys block above head
+				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK || // mys block above head
+				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK_USED // used mys block above head
 			) { Player.jump(); }
 
 		// If player is not on the ground, then don't reset the player's momentum until it reaches the ground
@@ -359,8 +377,12 @@ public class Level extends JPanel
 		mys_blockAnim += 1;
 		if (mys_blockAnim > 3) { mys_blockAnim = 0;}
 		int Px = Player.getPlayer_x()/BLOCK_SIZE; int Py = Player.getPlayer_y()/BLOCK_SIZE;
-		if (screenData[Px][Py] == MYS_BLOCK)
+		if (screenData[Px][Py] == MYS_BLOCK) {
 			screenData[Px][Py] = MYS_BLOCK_USED;
+			// MUSHROOM
+			//g2d.drawImage(mushroom, Px*BLOCK_SIZE, (Py-1)*BLOCK_SIZE, null);
+			items.add(new PowerUpShape(screenData, Px, (Py-1), 1, 0, BLOCK_SIZE, "gamepix/powerup/mushroom.png"));
+		}
 			//g2d.drawImage(mys_block_used, Px*BLOCK_SIZE, Py*BLOCK_SIZE, null);//draw mys block after being hit
 
 	}
