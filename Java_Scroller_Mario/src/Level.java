@@ -16,7 +16,7 @@ public class Level extends JPanel
     
     private final static int N_BLOCKS_X = 40;
     private final static int N_BLOCKS_Y = 15;
-    private final static int BLOCK_SIZE = 16; //17 Changes the spacing between all blocks (DUE TO MATH IF CHANGED WILL BREAK CODE)
+    private final static int BLOCK_SIZE = 16;
     private final static int SCREEN_SIZE = 15 * BLOCK_SIZE; //15 by 15 view even though map is larger
 
     private final static int SCREEN_SIZE_X = N_BLOCKS_X * BLOCK_SIZE;
@@ -141,7 +141,7 @@ public class Level extends JPanel
 	
 	private void intVariables()
 	{
-		screenData = new short[30][15]; ///check again
+		screenData = new short[levelData.length][levelData[0].length]; ///check again
 		
 		timer = new Timer (40, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -164,8 +164,8 @@ public class Level extends JPanel
 	
 	private void initLevel()
 	{
-		for (int r = 0; r < 30; r++)
-			for (int c = 0; c < 15; c++)
+		for (int r = 0; r < levelData.length; r++)
+			for (int c = 0; c < levelData[0].length; c++)
 				{screenData[r][c] = levelData[r][c];
 				//System.out.println(levelData[r][c]);
 				}
@@ -267,9 +267,9 @@ public class Level extends JPanel
 	{
 		int r, c;
 		
-		for (r = 0; r < 30 * BLOCK_SIZE; r += BLOCK_SIZE) //rn shows whole data
+		for (r = 0; r < screenData.length * BLOCK_SIZE; r += BLOCK_SIZE) //rn shows whole data
 		{
-			for (c = 0; c < 15 * BLOCK_SIZE; c += BLOCK_SIZE) //rn shows whole data
+			for (c = 0; c < 15 * screenData[0].length; c += BLOCK_SIZE) //rn shows whole data
 			{
 				int gr = r / BLOCK_SIZE;
 				int gc = c / BLOCK_SIZE;
@@ -315,8 +315,22 @@ public class Level extends JPanel
 				for (MoveableShape item : items) {
 					item.move();
 					item.draw(g2d);
+					if ( item.contains(Player.getPlayer_x()/BLOCK_SIZE, Player.getPlayer_y()/BLOCK_SIZE) ) // CLEAN THIS UP!!!!!
+					{
+						toBeDel.add(items.indexOf(item));
+						Player.togglePower();
+					}
+					// SLOPPY. FIX (EITHER MAKE ITEMS OF TYPE POWERUPSHAPE OR SOMETHING ELSE)
+					PowerUpShape temp = (PowerUpShape) item;
+					if (temp.getElapsedTime() > 10000)
+						toBeDel.add(items.indexOf(item));
 				}
 			}
+
+			// remove/despawn items that have passed expiration
+			for (Integer num : toBeDel) {
+				items.remove(items.get(num));
+			} toBeDel.clear();
 
 			// if no enemies left generate more ( EITHER MAKE THIS A FUNCTION OR REMOVE ENTIRELY )
 			//if (EnemyList.isEmpty()) {
@@ -406,7 +420,7 @@ public class Level extends JPanel
 		Font smallFont = new Font ("Helvetica",  Font.BOLD, 14);
 		g.setFont( smallFont);
 		g.setColor(Color.WHITE);
-		g.drawString(s, SCREEN_SIZE / 2 + 70, SCREEN_SIZE + 16);
+		g.drawString(s, SCREEN_SIZE / 2  + 60, SCREEN_SIZE + BLOCK_SIZE); // FIX THIS WITH MaTH So IT scales
 	}
 	
 	/////////////////////////////////////////////////////

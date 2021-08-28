@@ -95,8 +95,8 @@ public class EnemyShape implements MoveableShape {
 
     @Override
     public boolean contains(int x, int y) {
-        int lowX = x, highX = x + 22; // each sprite is 22px
-        int lowY = y, highY = y + 22;
+        //int lowX = x, highX = x + 22; // each sprite is 22px
+        //int lowY = y, highY = y + 22;
         //System.out.println(" block: " +  y / BLOCK_SIZE + " CEIL: " + Math.ceil(y / BLOCK_SIZE));
         if ( (Math.ceil(player_y / BLOCK_SIZE) == Math.ceil((double)y / BLOCK_SIZE)) && (
                 (player_x / BLOCK_SIZE == x / BLOCK_SIZE) || // RIGHT TOUCH

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 // FUTURE WORK:
 //      - either make this class a interface (multiple powerups with different effects or pass pic and string in constructor
@@ -33,6 +34,9 @@ public class PowerUpShape implements MoveableShape{
     private final static int MYS_BLOCK = 4;
 
     private BufferedImage powerUp;
+
+    private long startTime = System.currentTimeMillis();
+    long elapsedTime = 0L;
 
     PowerUpShape (short screenData[][], int brd_x, int brd_y, int req_dx, int req_dy, int width, String powerUpPathname) {
         this.screenData = screenData;
@@ -77,11 +81,30 @@ public class PowerUpShape implements MoveableShape{
         //move toward player
         item_x = item_x + item_speed * 1;
         item_y = item_y + item_speed * player_dy;
+        //getElapsedTime();
 
     }
 
     @Override
     public boolean contains(int r, int c) {
-        return false;
+        /*if ( (Math.ceil(item_y / BLOCK_SIZE) == Math.ceil((double)y / BLOCK_SIZE)) && (
+                (item_x / BLOCK_SIZE == x / BLOCK_SIZE) || // RIGHT TOUCH
+                        (Math.ceil((double) item_x / BLOCK_SIZE) == Math.ceil((double) x / BLOCK_SIZE)))) // LEFT TOUCH
+         */
+         if (   (r == item_x/BLOCK_SIZE || r == Math.ceil((double) item_x/BLOCK_SIZE)) &&
+                 item_y/BLOCK_SIZE == c
+         )
+        {
+            System.out.println("POWERUPPPPP");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public long getElapsedTime() {
+        elapsedTime = (new Date()).getTime() - startTime;
+        System.out.println("elapsed Time: " + elapsedTime);
+        return elapsedTime;
     }
 }

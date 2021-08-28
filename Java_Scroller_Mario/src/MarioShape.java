@@ -57,45 +57,45 @@ public class MarioShape implements MoveableShape
 		this.req_dx = req_dx;
 		this.req_dy = req_dy;
 
-		KirbyLeft = toBufferedImage( new ImageIcon("gamepix/Kirby2.png").getImage() );
+		KirbyLeft = AddTransparency.toBufferedImage( new ImageIcon("gamepix/Kirby2.png").getImage() );
 		//KirbyLeft = TransformColorToTransparency( toBufferedImage(KirbyLeft) );
 
 
 		//	KIRBY RIGHT WALKING SPRITES
 		//
 		Image KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-2.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[0][0] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[0][0] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-3.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation));
-		KirbyRightWalkArray[0][1] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255));
+		KirbyRightWalkArray[0][1] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-2.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[0][2] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[0][2] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby1-4.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[0][3] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[0][3] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		//	KIRBY LEFT WALKING SPRITES
 		//
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-2.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[1][0] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[1][0] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-3.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation));
-		KirbyRightWalkArray[1][1] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255));
+		KirbyRightWalkArray[1][1] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-2.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[1][2] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[1][2] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightWalkAnimation = new ImageIcon("gamepix/Kirby2-4.png").getImage();
-		KirbyRightWalkAnimation = TransformColorToTransparency( toBufferedImage(KirbyRightWalkAnimation) );
-		KirbyRightWalkArray[1][3] = imageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
+		KirbyRightWalkAnimation = AddTransparency.TransformColorToTransparency( AddTransparency.toBufferedImage(KirbyRightWalkAnimation), new Color(233,233,233), new Color(255,255,255) );
+		KirbyRightWalkArray[1][3] = AddTransparency.ImageToBufferedImage(KirbyRightWalkAnimation, KirbyRightWalkAnimation.getWidth(null), KirbyRightWalkAnimation.getHeight(null));
 
 		KirbyRightBuffered = new BufferedImage(
 				KirbyRight.getWidth(null),
@@ -124,11 +124,11 @@ public class MarioShape implements MoveableShape
 		//g2.fillRect(player_x, player_y, background.getWidth(), background.getHeight());
 		else {
 			if (FacingRight) {
-				KirbyRightTrans = TransformColorToTransparency(KirbyRight); //image
+				KirbyRightTrans = AddTransparency.TransformColorToTransparency(KirbyRight, new Color(233,233,233), new Color(255,255,255)); //image
 			} else {
-				KirbyRightTrans = TransformColorToTransparency(KirbyLeft); //image
+				KirbyRightTrans = AddTransparency.TransformColorToTransparency(KirbyLeft, new Color(233,233,233), new Color(255,255,255)); //image
 			}
-			KirbyRightBuffered = imageToBufferedImage(KirbyRightTrans, KirbyRight.getWidth(), KirbyRight.getHeight()); //buffered image
+			KirbyRightBuffered = AddTransparency.ImageToBufferedImage(KirbyRightTrans, KirbyRight.getWidth(), KirbyRight.getHeight()); //buffered image
 			File outFile2 = new File("gamepix/KirbyTrans.png");
 			try {
 				ImageIO.write(KirbyRightBuffered, "PNG", outFile2);
@@ -245,6 +245,11 @@ public class MarioShape implements MoveableShape
 		return player_x;
 	}
 
+	public void togglePower() {
+		PowerUp = true; // PUT IT ON A TIMER OR SOMETHING
+		player_speed = player_speed*2;
+	}
+
 	/* UNECESSARY?
 	public void reset() {
 		// EVERYTHING RESETS THAT WILL MESS UP PLAYER
@@ -252,76 +257,6 @@ public class MarioShape implements MoveableShape
 	} */
 
 ////////////////////////
-
-	private static BufferedImage imageToBufferedImage(Image image, int width, int height) {
-
-		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = bufferedImage.createGraphics();
-		g2.drawImage(image, 0, 0, null);
-		g2.dispose();
-
-		return bufferedImage;
-
-	}
-
-	//private Image TransformColorToTransparency(BufferedImage image, Color c1, Color c2)
-	private Image TransformColorToTransparency(BufferedImage image)
-	{
-		// Primitive test, just an example
-		final int r1 = 233;//c1.getRed();
-		final int g1 = 233;//c1.getGreen();
-		final int b1 = 233;//c1.getBlue();
-		final int r2 = 255;//c2.getRed();
-		final int g2 = 255;//c2.getGreen();
-		final int b2 = 255;//c2.getBlue();
-		ImageFilter filter = new RGBImageFilter()
-		{
-			public final int filterRGB(int x, int y, int rgb)
-			{
-				int r = (rgb & 0xFF0000) >> 16;
-				int g = (rgb & 0xFF00) >> 8;
-				int b = rgb & 0xFF;
-				//System.out.println(r+" "+g+" "+b);
-				if (r >= r1 && r <= r2 &&
-						g >= g1 && g <= g2 &&
-						b >= b1 && b <= b2)
-				{
-					// Set fully transparent but keep color
-					return rgb & 0xFFFFFF;
-				}
-				return rgb;
-			}
-		};
-
-		ImageProducer ip = new FilteredImageSource(image.getSource(), filter);
-		return Toolkit.getDefaultToolkit().createImage(ip);
-	}
-
-	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	public static BufferedImage toBufferedImage(Image img)
-	{
-		if (img instanceof BufferedImage)
-		{
-			return (BufferedImage) img;
-		}
-
-		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		// Draw the image on to the buffered image
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-
-		// Return the buffered image
-		return bimage;
-	}
-
 
 
 }
