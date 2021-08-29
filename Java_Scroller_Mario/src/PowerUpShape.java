@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 
 // FUTURE WORK:
 //      - either make this class a interface (multiple powerups with different effects or pass pic and string in constructor
@@ -27,6 +28,7 @@ public class PowerUpShape implements MoveableShape{
     private int player_dx = 0;
     private int player_dy = 0;
     private String pathname;
+    private String powerType; // "JUMP, SPEED, ETC")
 
     private final static int GRASS = 1;
     private final static int PIPE = 5;
@@ -51,6 +53,11 @@ public class PowerUpShape implements MoveableShape{
         Image powerUpStaging = new ImageIcon(this.pathname).getImage();
         powerUpStaging = AddTransparency.TransformColorToTransparency(AddTransparency.toBufferedImage(powerUpStaging), new Color(247, 248, 255), new Color(255, 255, 255));
         powerUp =  AddTransparency.toBufferedImage(powerUpStaging);
+
+        String[] powertypes = {"JUMP", "SPEED", "SLOW"}; // JUMP, SPEED, SLOW, SHRINK, GROW, ...
+        Random random = new Random();
+        int index = random.nextInt(powertypes.length);
+        powerType = powertypes[index];
 
         File outFile2 = new File("gamepix/powerup/mushroomTrans.png");
         try {
@@ -106,5 +113,9 @@ public class PowerUpShape implements MoveableShape{
         elapsedTime = (new Date()).getTime() - startTime;
         System.out.println("elapsed Time: " + elapsedTime);
         return elapsedTime;
+    }
+
+    public String getPowerType() {
+        return powerType;
     }
 }

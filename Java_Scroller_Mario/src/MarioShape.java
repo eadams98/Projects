@@ -2,9 +2,11 @@ import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 
 public class MarioShape implements MoveableShape
@@ -12,7 +14,8 @@ public class MarioShape implements MoveableShape
 	private int BLOCK_SIZE;
 	private int dx, dy;
 	private static int player_speed = 2;
-	
+	private int JUMP_HEIGHT;
+
 	private short screenData[][];
 	private boolean PowerUp;
 	private boolean Airborne = false;
@@ -56,6 +59,7 @@ public class MarioShape implements MoveableShape
 		this.PowerUp = PowerUp;
 		this.req_dx = req_dx;
 		this.req_dy = req_dy;
+		this.JUMP_HEIGHT = BLOCK_SIZE * 3;
 
 		KirbyLeft = AddTransparency.toBufferedImage( new ImageIcon("gamepix/Kirby2.png").getImage() );
 		//KirbyLeft = TransformColorToTransparency( toBufferedImage(KirbyLeft) );
@@ -245,11 +249,31 @@ public class MarioShape implements MoveableShape
 		return player_x;
 	}
 
-	public void togglePower() {
+	public void togglePower(String type) {
 		PowerUp = true; // PUT IT ON A TIMER OR SOMETHING
-		player_speed = player_speed*2;
+
+		if (type == "SPEED") {player_speed *= 2;}
+		else if (type == "SLOW") {player_speed /= 2;}
+		else if (type == "JUMP") {JUMP_HEIGHT *= 2;} // jump height tied to was tied to level but abstracted/encapsulated here
+
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				// return to normal stats
+				player_speed = 2;
+				JUMP_HEIGHT = BLOCK_SIZE*3;
+			}
+		};
+
+		Timer timer = new Timer("Power");
+		long delay = 10000L;
+		timer.schedule(task,delay);
 	}
 
+	public int getJUMP_HEIGHT() {
+		System.out.println("JUMP HEIGHT = " + JUMP_HEIGHT);
+		return JUMP_HEIGHT;
+	}
 	/* UNECESSARY?
 	public void reset() {
 		// EVERYTHING RESETS THAT WILL MESS UP PLAYER

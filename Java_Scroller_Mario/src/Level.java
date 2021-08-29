@@ -27,7 +27,7 @@ public class Level extends JPanel
     private Color Background = new Color (0, 219, 255);
     private Timer timer;
     private short[][] screenData;
-    private final int JUMP_HEIGHT = BLOCK_SIZE * 3; // jump height to eliminate magic numbers
+    //private final int JUMP_HEIGHT = BLOCK_SIZE * 3; // jump height to eliminate magic numbers
 	private final int FLOOR_LOCATION = BLOCK_SIZE * 11;
     
     private final static int GROUND = 0;
@@ -318,7 +318,8 @@ public class Level extends JPanel
 					if ( item.contains(Player.getPlayer_x()/BLOCK_SIZE, Player.getPlayer_y()/BLOCK_SIZE) ) // CLEAN THIS UP!!!!!
 					{
 						toBeDel.add(items.indexOf(item));
-						Player.togglePower();
+						PowerUpShape temp = (PowerUpShape) item; // Hate having to cast might  need to rework a bit
+						Player.togglePower(temp.getPowerType());
 					}
 					// SLOPPY. FIX (EITHER MAKE ITEMS OF TYPE POWERUPSHAPE OR SOMETHING ELSE)
 					PowerUpShape temp = (PowerUpShape) item;
@@ -375,7 +376,7 @@ public class Level extends JPanel
 
 		// If player is jumping don't toggle Player's Airborne propert until it reaches the height of its jump
 
-		if ( 	Player.getPlayer_y() == FLOOR_LOCATION - JUMP_HEIGHT || // reached the apex of jump height
+		if ( 	Player.getPlayer_y() == FLOOR_LOCATION - Player.getJUMP_HEIGHT() || // reached the apex of jump height
 				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == BLOCK || // block above head
 				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK || // mys block above head
 				screenData[Player.getPlayer_x() / BLOCK_SIZE][Player.getPlayer_y() / BLOCK_SIZE] == MYS_BLOCK_USED // used mys block above head
