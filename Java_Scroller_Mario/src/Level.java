@@ -58,30 +58,6 @@ public class Level extends JPanel
 			new ImageIcon("gamePix/question3.png").getImage(),
 			new ImageIcon("gamePix/question2.png").getImage()
 	}; private boolean mys_blockReset = false; private int mys_blockAnim = 0;
-
-
-    
-//    private final short levelData[][] = //Change to fit mario. DONE
-//    //last 3 of the top row would make up the ground		
-//    //top most layer last 1 is the cut off of the bottom of the screen
-//    	{
-//    		{ 0, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 }, //up
-//    		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 3, 3, 3, 2, 2, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 2, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 1, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
-//    		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-//    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-//    									//right
-//    	};
     
   private final short levelData[][] = 
 	  {
@@ -173,47 +149,6 @@ public class Level extends JPanel
 		continueLevel();
 	}
 	
-//    private void continueLevel()
-//    {
-//    	ghost = new ArrayList<MoveableShape>();
-//    	pacman = new ArrayList<PacmanShape>();
-//    	power = new ArrayList<Powerdot>();
-//    	
-//    	if (currLevel == 1)
-//    	{
-//    	for (int i = 0; i < numGhosts; i++)
-//    		ghost.add (new GhostShape (screenData, currLevel, 4, 4, BLOCK_SIZE, powerMode));             ///////////////   !!!!!!BASIS!!!!!!
-//    	pacman.add(new PacmanShape (screenData, currLevel, 7, 11, BLOCK_SIZE, score ));
-//    	power.add(new Powerdot(Color.RED,0 + 11, 0 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED, 14*24 + 11, 0 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED,0 + 11, 14*24 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED,14*24 + 11, 14*24 + 11,2,2 ));
-//    	
-//    	}
-//    	
-//    	else if (currLevel == 2)
-//    	{
-//        for (int i = 0; i < numGhosts; i++)
-//        	ghost.add (new GhostShape (screenDataTwo, currLevel, 4, 4, BLOCK_SIZE, powerMode));             ///////////////   !!!!!!BASIS!!!!!!
-//        pacman.add(new PacmanShape (screenDataTwo, currLevel, 7, 11, BLOCK_SIZE, score ));
-//    	pacman.add(new PacmanShape (screenData, currLevel, 7, 11, BLOCK_SIZE, score ));
-//    	power.add(new Powerdot(Color.RED,0 + 11, 0 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED, 14*24 + 11, 0 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED,0 + 11, 14*24 + 11,2,2 ));
-//    	power.add(new Powerdot(Color.RED,14*24 + 11, 14*24 + 11,2,2 ));
-//    	}
-//    	
-//        dying = false;
-//       // pacman_x = 7 * BLOCK_SIZE;
-//        //pacman_y = 11 * BLOCK_SIZE;
-//        //pacman_dx = 0;
-//        //pacman_dy = 0;
-//        req_dx = 0;
-//        req_dy = 0;
-//        view_dx = -1;
-//        view_dy = 0;
-//    }
-	
 	private void death()
 	{
 		playerLives--;
@@ -223,8 +158,9 @@ public class Level extends JPanel
 		
 		if (playerLives == 0)
 			inGame = false;
-		
-		continueLevel();
+
+		// RESET MAP
+		initLevel();
 	}
 	
 	private void continueLevel()
@@ -236,8 +172,7 @@ public class Level extends JPanel
 	
 	////////////////////////////////////////
 	
-	public void paintComponent (Graphics g)
-	{
+	public void paintComponent (Graphics g) {
 		super.paintComponent(g);
 		
 		Graphics2D g2d = (Graphics2D) g;
@@ -260,9 +195,33 @@ public class Level extends JPanel
 		{
 			currLevel = 1;
 			//showIntroScreen (g2d);
+			Player.draw(g2d);
+			for (EnemyShape villian : EnemyList) {
+				try {
+					villian.draw(g2d);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (!items.isEmpty()) {
+				for (MoveableShape item : items) {
+					try {
+						item.draw(g2d);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			showPauseScreen(g2d);
 		}
 	}
-	
+
+	private void showPauseScreen(Graphics2D g2d) {
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+		g2d.drawString("PAUSED", (SCREEN_SIZE+BORDER_SIZE)/4, SCREEN_SIZE/2);
+
+	}
+
 	private void drawLevel (Graphics2D g2d)
 	{
 		int r, c;
@@ -310,23 +269,7 @@ public class Level extends JPanel
 		{
 
 			movePlayer (g2d);
-
-			if (!items.isEmpty()) {
-				for (MoveableShape item : items) {
-					item.move();
-					item.draw(g2d);
-					if ( item.contains(Player.getPlayer_x()/BLOCK_SIZE, Player.getPlayer_y()/BLOCK_SIZE) ) // CLEAN THIS UP!!!!!
-					{
-						toBeDel.add(items.indexOf(item));
-						PowerUpShape temp = (PowerUpShape) item; // Hate having to cast might  need to rework a bit
-						Player.togglePower(temp.getPowerType());
-					}
-					// SLOPPY. FIX (EITHER MAKE ITEMS OF TYPE POWERUPSHAPE OR SOMETHING ELSE)
-					PowerUpShape temp = (PowerUpShape) item;
-					if (temp.getElapsedTime() > 10000)
-						toBeDel.add(items.indexOf(item));
-				}
-			}
+			moveItems(g2d);
 
 			// remove/despawn items that have passed expiration
 			for (Integer num : toBeDel) {
@@ -414,6 +357,28 @@ public class Level extends JPanel
 			villian.draw(g2d);
 		}
 	}
+
+	private void moveItems (Graphics2D g2d) throws IOException {
+		if (!items.isEmpty()) {
+			for (MoveableShape item : items) {
+				item.move();
+				item.draw(g2d);
+				if ( item.contains(Player.getPlayer_x()/BLOCK_SIZE, Player.getPlayer_y()/BLOCK_SIZE) ) // CLEAN THIS UP!!!!!
+				{
+					toBeDel.add(items.indexOf(item));
+					PowerUpShape temp = (PowerUpShape) item; // Hate having to cast might  need to rework a bit
+					Player.togglePower(temp.getPowerType());
+				}
+				// SLOPPY. FIX (EITHER MAKE ITEMS OF TYPE POWERUPSHAPE OR SOMETHING ELSE)
+				// !!!!!!!!!!!!!!!!!!!!!!!!!! FIX !!!!!!!!!!!!!!!!!!!!!!!!!!
+				// when paused the items get time method doesn't account for the pause therefore it will time out
+				// !!!!!!!!!!!!!!!!!!!!!!!!!! FIX !!!!!!!!!!!!!!!!!!!!!!!!!!
+				PowerUpShape temp = (PowerUpShape) item;
+				if (temp.getElapsedTime() > 10000)
+					toBeDel.add(items.indexOf(item));
+			}
+		}
+	}
 	
 	private void drawScore (Graphics2D g)
 	{
@@ -423,6 +388,8 @@ public class Level extends JPanel
 		g.setColor(Color.WHITE);
 		g.drawString(s, SCREEN_SIZE / 2  + 60, SCREEN_SIZE + BLOCK_SIZE); // FIX THIS WITH MaTH So IT scales
 	}
+
+
 	
 	/////////////////////////////////////////////////////
 	
@@ -453,7 +420,29 @@ public class Level extends JPanel
                     Player.keyTracker(req_dx, req_dy);
                     //Player.jump(); ORDER OF OPERATION MAKES THIS INEFFECIENT
                 }
+                else if (key == KeyEvent.VK_SPACE)
+				{
+					// pause game
+					// Potentially turn inGame = false
+					// if inGame False it'll save position of all pieces, but won't display them when paused
+					// if timer.stop(). it'll freeze pieces in Place and show them, but won't print pause
+					System.out.println("PAUSED");
 
+					if (timer.isRunning()) {  inGame =false; }
+					else { timer.start(); }
+
+				}
+			}
+			else
+			{
+				if (key == KeyEvent.VK_SPACE)
+				{
+					// pause game
+					// Potentially turn inGame = false
+					System.out.println("Play");
+					inGame = true;
+					//timer.start();
+				}
 			}
 		}
 	}
