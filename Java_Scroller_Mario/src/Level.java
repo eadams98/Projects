@@ -32,7 +32,8 @@ public class Level extends JPanel
     
     private final static int GROUND = 0;
     private final static int GRASS = 1;
-    private final static int PIPE = 5;
+    private final static int PIPE_BODY = 5;
+    private final static int PIPE_TOP = 7;
     private final static int BLOCK = 3;
     private final static int MYS_BLOCK = 4;
     // after mys_block has ben hit
@@ -47,10 +48,13 @@ public class Level extends JPanel
     
 	private Image ground = new ImageIcon("gamepix/middleGround.png").getImage();
 	private Image grass = new ImageIcon("gamepix/topGround.png").getImage();
-	private Image pipe = new ImageIcon("gamepix/pipebody.png").getImage();
 	private Image block = new ImageIcon("gamepix/yellowEye.png").getImage();
 	private Image mys_block_used = new ImageIcon("gamepix/greyEye.png").getImage();
 	private Image mushroom = new ImageIcon("gamepix/mushroom.png").getImage();
+
+	private Image pipe_body; // = new ImageIcon("gamepix/pipebody.png").getImage();
+
+	private Image pipe_top; // = new ImageIcon("gamepix/pipehead.png").getImage();
 
 	private Image[] mys_block = {
 			new ImageIcon("gamePix/question1.png").getImage(),
@@ -65,7 +69,7 @@ public class Level extends JPanel
 			  {2, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 1, 0, 0},
 			  {2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 1, 0, 0},
 			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0},
-			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0}, //5
+			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7, 1, 0, 0}, //5
 			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0},
 			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0},
 			  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0},
@@ -95,13 +99,17 @@ public class Level extends JPanel
 	  };
 
 
-	public Level() 
+	public Level()
 	{
 		
 		setMinimumSize (new Dimension (SCREEN_SIZE + BORDER_SIZE, SCREEN_SIZE + BORDER_SIZE));
 		setPreferredSize (new Dimension (SCREEN_SIZE , SCREEN_SIZE +  BORDER_SIZE));
-		
-		intVariables();
+
+		try {
+			intVariables();
+		} catch (Exception e){
+			System.out.println("PROBLEM FORMATING PIPE IMAGE");
+		}
 		intBoard();
 		intGame();
 
@@ -115,9 +123,17 @@ public class Level extends JPanel
 		setDoubleBuffered (true);
 	}
 	
-	private void intVariables()
+	private void intVariables() throws IOException
 	{
 		screenData = new short[levelData.length][levelData[0].length]; ///check again
+
+		AddTransparency.resize("gamepix/pipebody.png", "gamepix/pipebodyFormated.png", 22, 22);
+		pipe_body = new ImageIcon("gamepix/pipebodyFormated.png").getImage();
+		pipe_body = AddTransparency.TransformColorToTransparency(AddTransparency.toBufferedImage(pipe_body), new Color(61, 70, 72), new Color(125, 145, 151));
+
+		AddTransparency.resize("gamepix/pipehead.png", "gamepix/pipeheadFormated.png", 22, 22);
+		pipe_top = new ImageIcon("gamepix/pipeheadFormated.png").getImage();;
+		pipe_top = AddTransparency.TransformColorToTransparency(AddTransparency.toBufferedImage(pipe_top), new Color(250, 250, 250), new Color(255, 255, 255));;
 		
 		timer = new Timer (40, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -243,10 +259,14 @@ public class Level extends JPanel
 				if (screenData[gr][gc] == GRASS) //1
 					g2d.drawImage(grass, r, c, null);
 				
-				if (screenData[gr][gc] == PIPE) //5	
-					{g2d.drawImage(pipe, r,c, null);//draw pipe
-					System.out.println("2");
-					}
+				if (screenData[gr][gc] == PIPE_BODY) //5
+					g2d.drawImage(pipe_body, r,c, null);//draw pipe body
+					//System.out.println("2");
+
+				if (screenData[gr][gc] == PIPE_TOP) //7
+					// DEAL WITH MAGIC NUMBER (PIPE HEAD AND BODY HAVE DIFF DIMESIONS SO REQUIRED AN OFFSET
+					g2d.drawImage(pipe_top, r, c, null); //draw pipe top
+
 				if (screenData[gr][gc] == BLOCK) //3
 					g2d.drawImage(block, r, c, null);//draw block
 					//System.out.println("3");
@@ -312,6 +332,7 @@ public class Level extends JPanel
 	private void movePlayer (Graphics2D g2d)
 	{
 		//System.out.println("should print if stuck at  step");
+
 		Player.move();
 		//Player = new MarioShape (screenData, 0, 11, req_dx, req_dy, BLOCK_SIZE, PowerUp); no movement because req_dx, req_dy not passed
 		Player.draw(g2d);

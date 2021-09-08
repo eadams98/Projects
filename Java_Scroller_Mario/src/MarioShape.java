@@ -196,11 +196,27 @@ public class MarioShape implements MoveableShape
 				player_x = player_x + player_speed * player_dx;
 				player_y = player_y + player_speed * 1;
 			}
+
+			// this works to prevent player from walking through pipes, but It could be improved a lot
 			else
-			{
+		{
+			if ( 	(screenData[(player_x / BLOCK_SIZE) + 1][player_y/BLOCK_SIZE] == 7 && player_dx == 1)||
+					(screenData[(player_x / BLOCK_SIZE) - 1][player_y/BLOCK_SIZE] == 7) && player_dx == -1) {
+				player_x = player_x + player_speed * 0;
+				player_y = player_y + player_speed * player_dy;
+			} else {
 				player_x = player_x + player_speed * player_dx;
 				player_y = player_y + player_speed * player_dy;
 			}
+		}
+		/*
+			else
+		{
+
+			player_x = player_x + player_speed * player_dx;
+			player_y = player_y + player_speed * player_dy;
+
+		}*/
 			
 			if (player_dy == -1) {
 				System.out.println("hello");
@@ -211,7 +227,7 @@ public class MarioShape implements MoveableShape
 			}
 		//System.out.println(player_x + " " + player_y);
 
-		
+
 		
 	}
 
