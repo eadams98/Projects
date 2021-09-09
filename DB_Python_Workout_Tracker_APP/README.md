@@ -1,6 +1,6 @@
 # SUMMARY
 
-This is a purely pythonic implementation of a work out tracker app. I am currenlty using a local instance of MySQL to pull and populate the app.
+This is a purely pythonic implementation of a work out tracker app. I am currenlty using a local instance of MySQL to pull data from and populate the app.
 
 # FUTURE
 
