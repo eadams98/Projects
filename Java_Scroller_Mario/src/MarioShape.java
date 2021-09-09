@@ -200,8 +200,8 @@ public class MarioShape implements MoveableShape
 			// this works to prevent player from walking through pipes, but It could be improved a lot
 			else
 		{
-			if ( 	(screenData[(player_x / BLOCK_SIZE) + 1][player_y/BLOCK_SIZE] == 7 && player_dx == 1)||
-					(screenData[(player_x / BLOCK_SIZE) - 1][player_y/BLOCK_SIZE] == 7) && player_dx == -1) {
+			if ( 	(screenData[(player_x / BLOCK_SIZE)+1][player_y/BLOCK_SIZE] == 7 && player_dx == 1)||
+					(screenData[((player_x-1) / BLOCK_SIZE)][player_y/BLOCK_SIZE] == 7) && player_dx == -1) {
 				player_x = player_x + player_speed * 0;
 				player_y = player_y + player_speed * player_dy;
 			} else {
