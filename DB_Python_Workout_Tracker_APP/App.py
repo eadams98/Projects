@@ -3,37 +3,6 @@ import os
 #import Db_translator # imports file so u have to prefix it with name to access methods and such 
 from Db_translator import * #imports everything
 
-
-'''
-Variables
-'''
-pageDict = {}
-startPage = basePage = armPage = []
-CANVAS_HEIGHT = CANVAS_WIDTH = 500
-
-'''
-Definitions
-'''
-
-def create_window():
-    window = Toplevel(app)
-
-def clicked():
-    print(canvas.find_all())
-
-def enter():
-    for obj in canvas.find_all():
-        canvas.itemconfigure(obj, state='hidden')
-
-'''
-app = Tk()
-app.title("Workout Companion")
-canvas = Canvas(app, width=CANVAS_WIDTH, height=CANVAS_HEIGHT, background = 'AntiqueWhite3')
-canvas.grid(row=0)
-canvas.create_text(CANVAS_WIDTH/2, CANVAS_HEIGHT/4, text= "Welcome to the Workout Tracker!")
-Button(app, text="Enter", command= enter).grid(row=0)
-'''
-
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master) # RESEARCH
@@ -212,27 +181,91 @@ class Application(tk.Frame):
             #keys = ['name', 'reps', 'lbs']
             keys = self.colNames
 
-            for col, key in enumerate(keys):
-                # label = col name
-                name = tk.Label(self.master, text=key)
-                name.grid(column = col, row = 0, padx = 10, pady = 10)
+            if len(keys) < 4: #prevent table elements from overwriting the back button 
+                for col, key in enumerate(keys):
+                    # label = col name
+                    name = tk.Label(self.master, text=key)
+                    name.grid(column = col, row = 0, padx = 10, pady = 10)
 
-            # row 0 is reserved for names of table
-            trueRow = 1
+                # row 0 is reserved for names of table
+                trueRow = 1
 
-            # dictionary is a dictionary of all columns, self.table_entries is a list of dictonaries of rows
-            for row, dictionary in enumerate(self.table_entries):
-                
-                    #print(dictionary[key])
-                    # row 0 2 4
-                    # row 1 3 5
+                # dictionary is a dictionary of all columns, self.table_entries is a list of dictonaries of rows
+                for row, dictionary in enumerate(self.table_entries):
                     
-                    ############## NOTE !!!! ##############
-                    ### THIS WILL BREAK DUE TO THE FACT THAT KEY MIGHT NOT BE IN DICTIONARY
-                    for idx in range(len(keys)): 
-                        # label = col val
-                        value = tk.Label(self.master, text=dictionary[keys[idx]])
-                        value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
+                        #print(dictionary[key])
+                        # row 0 2 4
+                        # row 1 3 5
+                        
+                        ############## NOTE !!!! ##############
+                        ### THIS WILL BREAK DUE TO THE FACT THAT KEY MIGHT NOT BE IN DICTIONARY
+                        for idx in range(len(keys)): 
+                            # label = col val
+                            value = tk.Label(self.master, text=dictionary[keys[idx]])
+                            value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
+
+            else: # incase of there being 4 or more rows make multiple views of said page with a max of 3 elems a page
+                views = [ [] for x in range( ((len(keys) // 3) + 1) ) ] # make num of list needed for as many pages needed (each list contains keys for placement)
+                placement = {} # create dictionary (key: name of col, value: nums responsible for placement in grid)
+                
+                for col, key in enumerate(keys):
+                    # label = col val
+                    name = tk.Label(self.master, text=key)
+                    name.grid(column = col, row = 0, padx = 10, pady = 10)
+
+                    # PRESSUMES THAT ALL KEYS ARE UNIQUE (SHOULD BE SINCE ONLY PULLING FROM ONE TABLE)
+                    views[col//3].append(key)
+                    placement[key] = {"column" : col, "row" : 0,  "padx" : 10, "pad" : 10}
+
+                # row 0 is reserved for names of table
+                trueRow = 1 
+
+                # dictionary is a dictionary of all columns, self.table_entries is a list of dictonaries of rows
+                for row, dictionary in enumerate(self.table_entries):
+                    
+                        #print(dictionary[key])
+                        # row 0 2 4
+                        # row 1 3 5
+                        
+                        ############## NOTE !!!! ##############
+                        ### THIS WILL BREAK DUE TO THE FACT THAT KEY MIGHT NOT BE IN DICTIONARY
+
+                        ### FOR THIS YOU HAVE TO HAVE A TUPLE OF all 3 elements as the key and list of 3 dictionaries as value
+                        ### every 3 iteration u append tuple and list of dicts you made and reset them for next time
+                        tup_key = []
+                        for idx in range(len(keys)): 
+                            # label = col val
+                            
+                            value = tk.Label(self.master, text=dictionary[keys[idx]])
+                            value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
+                            print("idx: ",idx)
+                        
+                            # HAPPENS EVERY 3 iterations
+                            if (idx - 2) % 3 == 0: # offset it by 2 so it happens at (2, 5, 7, etc...)
+                                tup_key.append(dictionary[keys[idx]])
+                                print("keys = ", tuple(tup_key))
+                                views[idx//3].append( tuple(tup_key) )
+                                placement[tuple(tup_key)] = [
+                                    {"column" : idx - 2, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                    {"column" : idx - 1, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                    {"column" : idx, "row" : trueRow + row, "padx" : 2, "pady" : 2}                            
+                                                            ]
+                                tup_key = []
+
+                            elif idx == len(keys) - 1: # not a perfect %3 make sure you still take care of it
+                                tup_key.append(dictionary[keys[idx]])
+                                tmp = []
+                                for x in range(len(tup_key)):
+                                    tmp.append({"column" : idx - (x-2), "row" : trueRow + row, "padx" : 2, "pady" : 2})
+
+                                placement[tuple(tup_key)] = tmp
+                                
+                            
+                            else:
+                                tup_key.append(dictionary[keys[idx]])
+                print(placement.items())
+
+
 
         # Tables Page
         if page == "Tables Page":
