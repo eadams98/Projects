@@ -205,17 +205,20 @@ class Application(tk.Frame):
                             value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
 
             else: # incase of there being 4 or more rows make multiple views of said page with a max of 3 elems a page
+                
+                # list indicies indicate which page you're on (EX: views[0] = page 1's keys)
                 views = [ [] for x in range( ((len(keys) // 3) + 1) ) ] # make num of list needed for as many pages needed (each list contains keys for placement)
                 placement = {} # create dictionary (key: name of col, value: nums responsible for placement in grid)
                 
                 for col, key in enumerate(keys):
                     # label = col val
-                    name = tk.Label(self.master, text=key)
-                    name.grid(column = col, row = 0, padx = 10, pady = 10)
+                    #name = tk.Label(self.master, text=key)
+                    #name.grid(column = col, row = 0, padx = 10, pady = 10)
 
-                    # PRESSUMES THAT ALL KEYS ARE UNIQUE (SHOULD BE SINCE ONLY PULLING FROM ONE TABLE)
-                    views[col//3].append(key)
-                    placement[key] = {"column" : col, "row" : 0,  "padx" : 10, "pad" : 10}
+                    # these are singular string names. I keep them as tuples just to match the rest of the entries in
+                    # placement dictionary
+                    views[col//3].append(tuple([key]))
+                    placement[tuple([key])] = {"column" : col, "row" : 0,  "padx" : 10, "pady" : 10}
 
                 # row 0 is reserved for names of table
                 trueRow = 1 
@@ -233,37 +236,84 @@ class Application(tk.Frame):
                         ### FOR THIS YOU HAVE TO HAVE A TUPLE OF all 3 elements as the key and list of 3 dictionaries as value
                         ### every 3 iteration u append tuple and list of dicts you made and reset them for next time
                         tup_key = []
+
                         for idx in range(len(keys)): 
                             # label = col val
                             
-                            value = tk.Label(self.master, text=dictionary[keys[idx]])
-                            value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
-                            print("idx: ",idx)
+                            #value = tk.Label(self.master, text=dictionary[keys[idx]])
+                            #value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
+                            #print("idx: ",idx)
                         
                             # HAPPENS EVERY 3 iterations
+                            ## ISSUE: trouble making keys unique. works well if at least one of the elements inside tup_key
+                            ##          are unique, otherwise it will cause overwriting issues
+                            ## SOLUTION: allows duplicate keys. values are now List of List of tups. if a key is a dup
+                            ##              the value (which is a list of tups) will just be appended to the current value (list of list of tups)
+                            ## LOOK UP SPEED: it is entirely dependent on  tup_key (list where keys are stored). at worst O(n) (linear search)
+                            ##                  finds out which list of tups to use from value by using the dup keys placment amoung dup keys
+                            ##                  EX: if this is the 3rd time this dup has been seen then we us 3 when indexing the values
+
                             if (idx - 2) % 3 == 0: # offset it by 2 so it happens at (2, 5, 7, etc...)
                                 tup_key.append(dictionary[keys[idx]])
-                                print("keys = ", tuple(tup_key))
+                                #print("keys = ", tuple(tup_key))
                                 views[idx//3].append( tuple(tup_key) )
-                                placement[tuple(tup_key)] = [
-                                    {"column" : idx - 2, "row" : trueRow + row, "padx" : 2, "pady" : 2},
-                                    {"column" : idx - 1, "row" : trueRow + row, "padx" : 2, "pady" : 2},
-                                    {"column" : idx, "row" : trueRow + row, "padx" : 2, "pady" : 2}                            
-                                                            ]
+
+                                # value is list of list of tup
+                                # REASON: in case of duplicates we just append to list instead of overwriting
+                                if tuple(tup_key) not in placement:
+                                    placement[tuple(tup_key)] = [
+                                                                [
+                                        {"column" : idx - 2, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                        {"column" : idx - 1, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                        {"column" : idx, "row" : trueRow + row, "padx" : 2, "pady" : 2}
+                                                                ]                            
+                                                                ]
+
+                                else:
+                                    placement[tuple(tup_key)].append(
+                                        [
+                                        {"column" : idx - 2, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                        {"column" : idx - 1, "row" : trueRow + row, "padx" : 2, "pady" : 2},
+                                        {"column" : idx, "row" : trueRow + row, "padx" : 2, "pady" : 2}
+                                        ] 
+                                        )
+
                                 tup_key = []
 
                             elif idx == len(keys) - 1: # not a perfect %3 make sure you still take care of it
                                 tup_key.append(dictionary[keys[idx]])
-                                tmp = []
-                                for x in range(len(tup_key)):
-                                    tmp.append({"column" : idx - (x-2), "row" : trueRow + row, "padx" : 2, "pady" : 2})
+                                tmp = [[]] # list of list of tups in case of duplicates
+                                views[idx//3].append( tuple(tup_key) )
 
-                                placement[tuple(tup_key)] = tmp
+                                for x in range(len(tup_key)):
+                                    tmp[0].append({"column" : idx - (x-2), "row" : trueRow + row, "padx" : 2, "pady" : 2})
+
+                                if tuple(tup_key) not in placement:
+                                    placement[tuple(tup_key)] = tmp
+                                else:
+                                    placement[tuple(tup_key)].append(tmp)
                                 
                             
                             else:
+                                #views[idx//3].append( tuple(tup_key) )
                                 tup_key.append(dictionary[keys[idx]])
                 print(placement.items())
+                print(len(placement.keys()), len(views))
+                print()
+                print("views: ", views)
+                for idx in range(3): # top columns
+                    print(views[0][idx])
+                    name = tk.Label(self.master, text=views[0][idx]) # all these will be tups with singular values
+                    place = placement[views[0][idx]]
+                    name.grid(column = place['column'], row = place['row'], padx = place['padx'], pady = place['pady'])
+
+                for idx in range(3, len(views[0]) + 1 ): #row data (in tuple form)
+                    print(views[0][idx])
+                    #value = tk.Label(self.master, text=dictionary[keys[idx]])
+                            #value.grid(column = idx, row= trueRow + row, padx= 2, pady= 2)
+                    for idx2, val in enumerate(views[0][idx]): # val = tuple()
+                        value = tk.Label(self.master, text=str(val))
+                        value.grid(column = idx2, row= trueRow + (idx-3), padx= 2, pady= 2)
 
 
 
