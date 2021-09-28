@@ -211,30 +211,40 @@ public class Level extends JPanel
 		{
 			currLevel = 1;
 			//showIntroScreen (g2d);
-			Player.draw(g2d);
-			for (EnemyShape villian : EnemyList) {
-				try {
-					villian.draw(g2d);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (!items.isEmpty()) {
-				for (MoveableShape item : items) {
+			if (playerLives != 0) {
+				Player.draw(g2d);
+				for (EnemyShape villian : EnemyList) {
 					try {
-						item.draw(g2d);
+						villian.draw(g2d);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
+				if (!items.isEmpty()) {
+					for (MoveableShape item : items) {
+						try {
+							item.draw(g2d);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				showPauseScreen(g2d);
+			} else {
+				showGameOverScreen(g2d);
 			}
-			showPauseScreen(g2d);
 		}
 	}
 
 	private void showPauseScreen(Graphics2D g2d) {
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 24));
 		g2d.drawString("PAUSED", (SCREEN_SIZE+BORDER_SIZE)/4, SCREEN_SIZE/2);
+
+	}
+
+	private void showGameOverScreen(Graphics2D g2d) {
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+		g2d.drawString("GAME OVER", (SCREEN_SIZE+BORDER_SIZE)/4, SCREEN_SIZE/2);
 
 	}
 
@@ -248,8 +258,8 @@ public class Level extends JPanel
 			{
 				int gr = r / BLOCK_SIZE;
 				int gc = c / BLOCK_SIZE;
-				
-				g2d.setColor (Background);
+
+				g2d.setColor(Background);
 				//System.out.println(screenData[gr][gc]);
 				//System.out.println("gr: " + gr + " gc: " + gc);
 				

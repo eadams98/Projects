@@ -204,7 +204,8 @@ public class MarioShape implements MoveableShape
 					(screenData[((player_x-1) / BLOCK_SIZE)][player_y/BLOCK_SIZE] == 7) && player_dx == -1) {
 				player_x = player_x + player_speed * 0;
 				player_y = player_y + player_speed * player_dy;
-			} else {
+			}
+			else {
 				player_x = player_x + player_speed * player_dx;
 				player_y = player_y + player_speed * player_dy;
 			}
@@ -218,11 +219,9 @@ public class MarioShape implements MoveableShape
 
 		}*/
 			
-			if (player_dy == -1) {
-				System.out.println("hello");
-				if ( getPlayer_y() == 187) {
-					//stop player from going below ground
-					System.out.println("STOP");player_dy = 0; Airborne = false;} //slopppyyy FIX
+			if (player_dy == -1 && screenData[(player_x / BLOCK_SIZE)][(player_y+1)/BLOCK_SIZE] == 7) { // used to have logic to try to prevent player from going under floor. Didn't actually stop them
+				player_dy = 0;
+
 				//Airborne = true;
 			}
 		//System.out.println(player_x + " " + player_y);
