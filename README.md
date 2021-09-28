@@ -1,10 +1,12 @@
 # Projects
 Independent projects
 
-MARIO/KIRBY JAVA SCROLLER
+## JAVA
+MARIO/KIRBY SCROLLER
 
+## JAVASCRIPT
 BlackJack
-
 Rock Paper Scissors
 
+## PYTHON
 Workout Tracker Database
